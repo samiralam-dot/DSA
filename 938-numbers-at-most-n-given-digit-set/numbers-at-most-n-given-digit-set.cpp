@@ -1,38 +1,35 @@
 class Solution {
 public:
-    int solve(int i, int st, vector<string>& nums, string& s) {
-        if (i == s.size()) return 1;
+map<vector<int>,int>m;
+    int solve(int pos, int t, int st, vector<string>& nums, string &s) {
+        if (pos == s.size()) return st;
+
+        vector<int>key={pos,t,st};
+        if(m[key]>0)return m[key];
 
         int ans = 0;
+        int l = t ? s[pos] - '0' : 9;
 
-        for (auto x : nums) {
-            int d = x[0] - '0';
-            int limit = s[i] - '0';
+        for (auto y : nums) {
+            int x = stoi(y);
 
-            if (st) {
-                if (d < limit) {
-                    ans += pow(nums.size(), s.size() - i - 1);
-                }
-                else if (d == limit) {
-                    ans += solve(i + 1, 1, nums, s);
-                }
-            }
-            else {
-                ans += solve(i + 1, 0, nums, s);
-            }
+            if (x > l) continue;
+
+            int nt = t && (x == s[pos] - '0');
+
+            ans += solve(pos + 1, nt, 1, nums, s);
         }
 
-        return ans;
+     
+        if (!st) {
+            ans += solve(pos + 1, 0, 0, nums, s);
+        }
+
+        return m[key]= ans;
     }
 
     int atMostNGivenDigitSet(vector<string>& digits, int n) {
         string s = to_string(n);
-        int ans = solve(0, 1, digits, s);
-
-        for (int len = 1; len < s.size(); len++) {
-            ans += pow(digits.size(), len);
-        }
-
-        return ans;
+        return solve(0, 1, 0, digits, s);
     }
 };
