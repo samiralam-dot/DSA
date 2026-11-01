@@ -1,8 +1,7 @@
 class Solution {
 public:
     long long minimumMaxValue(int n, int index, int value) {
-        auto ravonexqil = make_tuple(n, index, value);
-
+       
         if (value == 1) return -1;
 
         long long p = value;
